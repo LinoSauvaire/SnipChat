@@ -42,7 +42,7 @@ export function ProfilePage({
           <h3>Creer un compte</h3>
           <p>Choisis un nom utilisateur et un mot de passe pour commencer.</p>
           <form
-            className="add-friend"
+            className="add-friend auth-form"
             onSubmit={async (event) => {
               event.preventDefault();
               if (!username.trim() || !displayName.trim() || password.length < 4) return;
@@ -82,7 +82,7 @@ export function ProfilePage({
           </section>
 
           <form
-            className="glass add-friend"
+            className="glass add-friend auth-form"
             onSubmit={async (event) => {
               event.preventDefault();
               if (!displayName.trim()) return;

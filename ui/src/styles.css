@@ -96,6 +96,7 @@ input {
 .page {
   height: 100%;
   overflow: auto;
+  overflow-x: hidden;
   padding: 4px 2px;
 }
 
@@ -369,6 +370,8 @@ input {
 .composer input,
 .add-friend input {
   flex: 1;
+  min-width: 0;
+  width: 100%;
   border-radius: 12px;
   border: 1px solid rgba(167, 183, 210, 0.76);
   background: rgba(255, 255, 255, 0.9);
@@ -378,6 +381,7 @@ input {
 
 .composer button,
 .add-friend button {
+  min-width: 0;
   border: none;
   border-radius: 12px;
   padding: 10px 12px;
@@ -397,6 +401,10 @@ input {
 
 .add-friend-single {
   grid-template-columns: 1fr auto;
+}
+
+.auth-form {
+  grid-template-columns: 1fr;
 }
 
 .profile-head {
