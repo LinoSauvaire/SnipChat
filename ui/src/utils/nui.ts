@@ -4,7 +4,7 @@ import { appName, resourceName } from "./constants";
 export async function sendToLua<TPayload extends Record<string, unknown>>(
   action: string,
   payload?: TPayload
-): Promise<NUIResponse> {
+): Promise<NUIResponse<Record<string, any>>> {
   const message: NUIMessage<TPayload> = {
     app: appName,
     action,
@@ -24,6 +24,6 @@ export async function sendToLua<TPayload extends Record<string, unknown>>(
     body: JSON.stringify(message)
   });
 
-  const json = (await response.json()) as NUIResponse;
+  const json = (await response.json()) as NUIResponse<Record<string, any>>;
   return json;
 }

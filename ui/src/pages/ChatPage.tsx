@@ -9,8 +9,8 @@ interface ChatPageProps {
   conversations: Conversation[];
   friends: Friend[];
   messages: Message[];
-  onOpenChat: (chatId: string) => void;
-  onSendMessage: (chatId: string, text: string) => void;
+  onOpenChat: (chatId: string) => Promise<void>;
+  onSendMessage: (chatId: string, text: string) => Promise<void>;
 }
 
 export function ChatPage({
@@ -39,7 +39,9 @@ export function ChatPage({
               key={conversation.id}
               type="button"
               className={`conversation ${activeChatId === conversation.id ? "active" : ""}`}
-              onClick={() => onOpenChat(conversation.id)}
+              onClick={() => {
+                void onOpenChat(conversation.id);
+              }}
             >
               <FriendRow friend={friend} tailText={conversation.updatedAt} />
             </button>
@@ -56,10 +58,10 @@ export function ChatPage({
 
         <form
           className="composer"
-          onSubmit={(event) => {
+          onSubmit={async (event) => {
             event.preventDefault();
             if (!activeChatId) return;
-            onSendMessage(activeChatId, draft);
+            await onSendMessage(activeChatId, draft);
             setDraft("");
           }}
         >

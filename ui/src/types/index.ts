@@ -19,6 +19,29 @@ export interface Friend {
   streak: number;
 }
 
+export interface FriendRequest {
+  id: string;
+  from: Friend;
+  createdAt: string;
+}
+
+export interface SearchUser {
+  id: string;
+  username: string;
+  displayName: string;
+  avatar: string;
+  isFriend: boolean;
+  hasPending: boolean;
+}
+
+export interface SearchUsersPayload {
+  users: SearchUser[];
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
+}
+
 export interface AccountProfile {
   id: string;
   username: string;
@@ -51,7 +74,7 @@ export interface NUIMessage<T = unknown> {
   payload?: T;
 }
 
-export interface NUIResponse<T = unknown> {
+export interface NUIResponse<T = any> {
   ok: boolean;
   data?: T;
   error?: string;
@@ -63,4 +86,5 @@ export interface BootstrapPayload {
   stories: Story[];
   conversations: Conversation[];
   messages: Message[];
+  friendRequests: FriendRequest[];
 }

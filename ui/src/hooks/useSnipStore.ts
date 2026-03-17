@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { AccountProfile, AppPage, BootstrapPayload, Conversation, Friend, Message, Story } from "../types";
+import type { AccountProfile, AppPage, BootstrapPayload, Conversation, Friend, FriendRequest, Message, Story } from "../types";
 
 interface SnipState {
   currentPage: AppPage;
@@ -8,6 +8,7 @@ interface SnipState {
   account: AccountProfile | null;
   isReady: boolean;
   friends: Friend[];
+  friendRequests: FriendRequest[];
   stories: Story[];
   conversations: Conversation[];
   messages: Message[];
@@ -17,8 +18,10 @@ interface SnipState {
   setBootstrap: (payload: BootstrapPayload) => void;
   setAccount: (account: AccountProfile | null) => void;
   setFriends: (friends: Friend[]) => void;
+  setFriendRequests: (requests: FriendRequest[]) => void;
   setStories: (stories: Story[]) => void;
-  sendMessage: (chatId: string, content: string) => void;
+  setConversations: (conversations: Conversation[]) => void;
+  setMessages: (messages: Message[]) => void;
 }
 
 export const useSnipStore = create<SnipState>((set) => ({
@@ -28,6 +31,7 @@ export const useSnipStore = create<SnipState>((set) => ({
   account: null,
   isReady: false,
   friends: [],
+  friendRequests: [],
   stories: [],
   conversations: [],
   messages: [],
@@ -39,6 +43,7 @@ export const useSnipStore = create<SnipState>((set) => ({
     set({
       account: payload.account,
       friends: payload.friends,
+      friendRequests: payload.friendRequests,
       stories: payload.stories,
       conversations: payload.conversations,
       messages: payload.messages,
@@ -47,30 +52,8 @@ export const useSnipStore = create<SnipState>((set) => ({
     }),
   setAccount: (account) => set({ account }),
   setFriends: (friends) => set({ friends }),
+  setFriendRequests: (friendRequests) => set({ friendRequests }),
   setStories: (stories) => set({ stories }),
-
-  sendMessage: (chatId, content) =>
-    set((state) => {
-      const text = content.trim();
-      if (!text) return state;
-
-      const next: Message = {
-        id: `m${state.messages.length + 1}`,
-        chatId,
-        authorId: "me",
-        content: text,
-        createdAt: "Now",
-        type: "text",
-        mine: true
-      };
-
-      return {
-        messages: [...state.messages, next],
-        conversations: state.conversations.map((conversation) =>
-          conversation.id === chatId
-            ? { ...conversation, lastMessage: text, updatedAt: "Now", unread: 0 }
-            : conversation
-        )
-      };
-    })
+  setConversations: (conversations) => set({ conversations }),
+  setMessages: (messages) => set({ messages })
 }));
