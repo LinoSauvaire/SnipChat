@@ -70,6 +70,10 @@ local function normalizeUsername(username)
     return string.lower((username or ""):gsub("[^%w_]", ""))
 end
 
+local function hashPassword(password)
+    return tostring(GetHashKey((password or "") .. "_snipchat"))
+end
+
 local function makeAvatar(displayName)
     local initials = ""
     for part in string.gmatch(displayName or "", "%S+") do
@@ -136,6 +140,7 @@ local function setupDatabase()
             `username` VARCHAR(32) NOT NULL,
             `display_name` VARCHAR(64) NOT NULL,
             `bio` VARCHAR(255) NOT NULL DEFAULT '',
+            `password_hash` VARCHAR(64) NOT NULL DEFAULT '',
             `avatar` VARCHAR(8) NOT NULL DEFAULT 'SC',
             `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -143,6 +148,13 @@ local function setupDatabase()
             UNIQUE KEY `uniq_username` (`username`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     ]=]):format(DB_PREFIX), {})
+
+    pcall(function()
+        dbUpdate(([[
+            ALTER TABLE `%s_accounts`
+            ADD COLUMN `password_hash` VARCHAR(64) NOT NULL DEFAULT ''
+        ]]):format(DB_PREFIX), {})
+    end)
 
     dbUpdate(([=[
         CREATE TABLE IF NOT EXISTS `%s_friends` (
@@ -208,7 +220,7 @@ end
 
 local function dbGetUserByIdentifier(identifier)
     local row = dbSingle(([[
-        SELECT identifier, username, display_name, bio, avatar
+        SELECT identifier, username, display_name, bio, password_hash, avatar
         FROM `%s_accounts`
         WHERE identifier = ?
     ]]):format(DB_PREFIX), { identifier })
@@ -221,13 +233,14 @@ local function dbGetUserByIdentifier(identifier)
         username = row.username,
         displayName = row.display_name,
         bio = row.bio,
+        passwordHash = row.password_hash,
         avatar = row.avatar
     }
 end
 
 local function dbFindUserByUsername(username)
     local row = dbSingle(([[
-        SELECT identifier, username, display_name, bio, avatar
+        SELECT identifier, username, display_name, bio, password_hash, avatar
         FROM `%s_accounts`
         WHERE username = ?
     ]]):format(DB_PREFIX), { username })
@@ -240,8 +253,31 @@ local function dbFindUserByUsername(username)
         username = row.username,
         displayName = row.display_name,
         bio = row.bio,
+        passwordHash = row.password_hash,
         avatar = row.avatar
     }, row.identifier
+end
+
+local function dbRegisterUser(identifier, username, displayName, bio, passwordHash)
+    local avatar = makeAvatar(displayName)
+    dbUpdate(([[
+        INSERT INTO `%s_accounts` (identifier, username, display_name, bio, password_hash, avatar)
+        VALUES (?, ?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE
+            username = VALUES(username),
+            display_name = VALUES(display_name),
+            bio = VALUES(bio),
+            password_hash = VALUES(password_hash),
+            avatar = VALUES(avatar)
+    ]]):format(DB_PREFIX), { identifier, username, displayName, bio or "", passwordHash, avatar })
+
+    return {
+        username = username,
+        displayName = displayName,
+        bio = bio or "",
+        passwordHash = passwordHash,
+        avatar = avatar
+    }
 end
 
 local function dbSaveUser(identifier, username, displayName, bio)
@@ -1031,6 +1067,7 @@ local function handleAction(source, action, payload)
     if action == "registerAccount" then
         local username = normalizeUsername(payload.username)
         local displayName = (payload.displayName or ""):sub(1, 32)
+        local password = tostring(payload.password or "")
 
         if username == "" or #username < 3 then
             return false, nil, "Pseudo invalide"
@@ -1038,6 +1075,11 @@ local function handleAction(source, action, payload)
         if displayName == "" then
             return false, nil, "Nom d'affichage invalide"
         end
+        if #password < 4 then
+            return false, nil, "Mot de passe trop court"
+        end
+
+        local passwordHash = hashPassword(password)
 
         if UsingDatabase then
             local existing, existingIdentifier = dbFindUserByUsername(username)
@@ -1045,7 +1087,7 @@ local function handleAction(source, action, payload)
                 return false, nil, "Pseudo deja utilise"
             end
 
-            local saved = dbSaveUser(identifier, username, displayName, user and user.bio or "")
+            local saved = dbRegisterUser(identifier, username, displayName, user and user.bio or "", passwordHash)
             return true, {
                 account = publicAccount(saved, identifier),
                 friends = dbListFriends(identifier)
@@ -1061,6 +1103,7 @@ local function handleAction(source, action, payload)
             username = username,
             displayName = displayName,
             bio = user and user.bio or "",
+            passwordHash = passwordHash,
             avatar = makeAvatar(displayName),
             friends = user and user.friends or {}
         }
