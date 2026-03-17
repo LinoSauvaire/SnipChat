@@ -1,11 +1,12 @@
 import { create } from "zustand";
-import { conversationsSeed, friendsSeed, messagesSeed, storiesSeed } from "../data/mockData";
-import type { AppPage, Conversation, Friend, Message, Story } from "../types";
+import type { AccountProfile, AppPage, BootstrapPayload, Conversation, Friend, Message, Story } from "../types";
 
 interface SnipState {
   currentPage: AppPage;
   activeChatId: string | null;
   visible: boolean;
+  account: AccountProfile | null;
+  isReady: boolean;
   friends: Friend[];
   stories: Story[];
   conversations: Conversation[];
@@ -13,47 +14,40 @@ interface SnipState {
   setPage: (page: AppPage) => void;
   setVisible: (visible: boolean) => void;
   setActiveChat: (chatId: string) => void;
-  addFriend: (name: string, username: string) => void;
+  setBootstrap: (payload: BootstrapPayload) => void;
+  setAccount: (account: AccountProfile | null) => void;
+  setFriends: (friends: Friend[]) => void;
+  setStories: (stories: Story[]) => void;
   sendMessage: (chatId: string, content: string) => void;
-  captureStory: (caption: string) => void;
-  sendSnapToChat: (chatId: string) => void;
 }
 
 export const useSnipStore = create<SnipState>((set) => ({
   currentPage: "camera",
-  activeChatId: "c1",
+  activeChatId: null,
   visible: true,
-  friends: friendsSeed,
-  stories: storiesSeed,
-  conversations: conversationsSeed,
-  messages: messagesSeed,
+  account: null,
+  isReady: false,
+  friends: [],
+  stories: [],
+  conversations: [],
+  messages: [],
 
   setPage: (page) => set({ currentPage: page }),
   setVisible: (visible) => set({ visible }),
   setActiveChat: (chatId) => set({ activeChatId: chatId }),
-
-  addFriend: (name, username) =>
-    set((state) => {
-      const id = `u${state.friends.length + 1}`;
-      return {
-        friends: [
-          {
-            id,
-            name,
-            username,
-            avatar: name
-              .split(" ")
-              .map((part) => part[0])
-              .join("")
-              .slice(0, 2)
-              .toUpperCase(),
-            isOnline: true,
-            streak: 0
-          },
-          ...state.friends
-        ]
-      };
+  setBootstrap: (payload) =>
+    set({
+      account: payload.account,
+      friends: payload.friends,
+      stories: payload.stories,
+      conversations: payload.conversations,
+      messages: payload.messages,
+      activeChatId: payload.conversations[0]?.id ?? null,
+      isReady: true
     }),
+  setAccount: (account) => set({ account }),
+  setFriends: (friends) => set({ friends }),
+  setStories: (stories) => set({ stories }),
 
   sendMessage: (chatId, content) =>
     set((state) => {
@@ -75,44 +69,6 @@ export const useSnipStore = create<SnipState>((set) => ({
         conversations: state.conversations.map((conversation) =>
           conversation.id === chatId
             ? { ...conversation, lastMessage: text, updatedAt: "Now", unread: 0 }
-            : conversation
-        )
-      };
-    }),
-
-  captureStory: (caption) =>
-    set((state) => ({
-      stories: [
-        {
-          id: `s${state.stories.length + 1}`,
-          friendId: "me",
-          name: "You",
-          avatar: "ME",
-          mediaLabel: caption || "New story post",
-          postedAt: "Now",
-          viewed: false
-        },
-        ...state.stories
-      ]
-    })),
-
-  sendSnapToChat: (chatId) =>
-    set((state) => {
-      const snapMessage: Message = {
-        id: `m${state.messages.length + 1}`,
-        chatId,
-        authorId: "me",
-        content: "You sent a snap",
-        createdAt: "Now",
-        type: "snap",
-        mine: true
-      };
-
-      return {
-        messages: [...state.messages, snapMessage],
-        conversations: state.conversations.map((conversation) =>
-          conversation.id === chatId
-            ? { ...conversation, lastMessage: "You sent a snap", updatedAt: "Now", unread: 0 }
             : conversation
         )
       };

@@ -395,6 +395,10 @@ input {
   margin-bottom: 10px;
 }
 
+.add-friend-single {
+  grid-template-columns: 1fr auto;
+}
+
 .profile-head {
   display: flex;
   gap: 10px;

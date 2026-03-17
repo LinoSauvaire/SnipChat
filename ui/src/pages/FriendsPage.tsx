@@ -5,11 +5,10 @@ import { FriendRow } from "../components/FriendRow";
 
 interface FriendsPageProps {
   friends: Friend[];
-  onAddFriend: (name: string, username: string) => void;
+  onAddFriend: (username: string) => Promise<void>;
 }
 
 export function FriendsPage({ friends, onAddFriend }: FriendsPageProps) {
-  const [name, setName] = useState("");
   const [username, setUsername] = useState("");
 
   return (
@@ -17,16 +16,14 @@ export function FriendsPage({ friends, onAddFriend }: FriendsPageProps) {
       <h2 className="section-title">Amis</h2>
 
       <form
-        className="glass add-friend"
+        className="glass add-friend add-friend-single"
         onSubmit={(event) => {
           event.preventDefault();
-          if (!name.trim() || !username.trim()) return;
-          onAddFriend(name.trim(), username.trim().replace(/^@/, ""));
-          setName("");
+          if (!username.trim()) return;
+          onAddFriend(username.trim().replace(/^@/, ""));
           setUsername("");
         }}
       >
-        <input value={name} onChange={(event) => setName(event.target.value)} placeholder="Nom de l'ami" />
         <input value={username} onChange={(event) => setUsername(event.target.value)} placeholder="@pseudo" />
         <button type="submit">Ajouter</button>
       </form>

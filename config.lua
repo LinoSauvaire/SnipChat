@@ -1,8 +1,8 @@
 Config = {}
 
-Config.Identifier = "react-ts-template"
+Config.Identifier = "snipchat"
 Config.DefaultApp = true
 
-Config.Name = "React TS"
-Config.Description = "Template app using React and TypeScript."
-Config.Developer = "LB Scripts"
+Config.Name = "SnipChat"
+Config.Description = "Messagerie visuelle avec stories et amis."
+Config.Developer = "SnipChat Team"

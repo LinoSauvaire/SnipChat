@@ -19,6 +19,14 @@ export interface Friend {
   streak: number;
 }
 
+export interface AccountProfile {
+  id: string;
+  username: string;
+  displayName: string;
+  bio: string;
+  avatar: string;
+}
+
 export interface Message {
   id: string;
   chatId: string;
@@ -41,4 +49,18 @@ export interface NUIMessage<T = unknown> {
   app: string;
   action: string;
   payload?: T;
+}
+
+export interface NUIResponse<T = unknown> {
+  ok: boolean;
+  data?: T;
+  error?: string;
+}
+
+export interface BootstrapPayload {
+  account: AccountProfile | null;
+  friends: Friend[];
+  stories: Story[];
+  conversations: Conversation[];
+  messages: Message[];
 }

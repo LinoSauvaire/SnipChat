@@ -2,32 +2,27 @@ while GetResourceState("lb-phone") ~= "started" do
     Wait(500)
 end
 
-Wait(1000) -- wait for the AddCustomApp export to exist
+Wait(1000)
 
 local url = GetResourceMetadata(GetCurrentResourceName(), "ui_page", 0)
+local pendingRequests = {}
+local requestCounter = 0
 
 local function AddApp()
     local added, errorMessage = exports["lb-phone"]:AddCustomApp({
-        identifier = Config.Identifier, -- unique app identifier
-
+        identifier = Config.Identifier,
         name = Config.Name,
         description = Config.Description,
         developer = Config.Developer,
-
-        defaultApp = Config.DefaultApp, -- should the app be installed by default? this also means that you can't uninstall it
-        size = 59812, -- the app size in kb
-        -- price = 0, -- OPTIONAL: require players to pay for the app with in-game money to download it
-
-        images = { -- OPTIONAL array of screenshots of the app, used for showcasing the app
+        defaultApp = Config.DefaultApp,
+        size = 59812,
+        images = {
             "https://cfx-nui-" .. GetCurrentResourceName() .. "/ui/dist/screenshot-light.png",
             "https://cfx-nui-" .. GetCurrentResourceName() .. "/ui/dist/screenshot-dark.png"
         },
-
         ui = url:find("http") and url or GetCurrentResourceName() .. "/" .. url,
         icon = url:find("http") and url .. "/public/icon.svg" or "https://cfx-nui-" .. GetCurrentResourceName() .. "/ui/dist/icon.svg",
-
         fixBlur = true,
-
         onClose = function()
             exports["lb-phone"]:DisableWalkableCam()
         end
@@ -46,46 +41,96 @@ AddEventHandler("onResourceStart", function(resource)
     end
 end)
 
-local directions = { "N", "NE", "E", "SE", "S", "SW", "W", "NW" }
-local oldYaw, currentDirection
+RegisterNetEvent("snipchat:response", function(requestId, ok, data, err)
+    local resolver = pendingRequests[requestId]
+    if not resolver then
+        return
+    end
 
-RegisterNUICallback("getDirection", function(data, cb)
-    cb(currentDirection)
+    pendingRequests[requestId] = nil
+    resolver:resolve({
+        ok = ok,
+        data = data,
+        error = err
+    })
 end)
 
-RegisterNUICallback("toggleCamera", function(toggle, cb)
-    if toggle then
+local function AwaitServer(action, payload)
+    requestCounter = requestCounter + 1
+    local requestId = tostring(requestCounter)
+    local p = promise.new()
+
+    pendingRequests[requestId] = p
+
+    SetTimeout(8000, function()
+        local resolver = pendingRequests[requestId]
+        if not resolver then
+            return
+        end
+
+        pendingRequests[requestId] = nil
+        resolver:resolve({
+            ok = false,
+            error = "timeout"
+        })
+    end)
+
+    TriggerServerEvent("snipchat:request", requestId, action, payload or {})
+
+    return Citizen.Await(p)
+end
+
+local function payloadOf(data)
+    if type(data) == "table" and data.payload then
+        return data.payload
+    end
+
+    return data or {}
+end
+
+local function RegisterServerAction(name)
+    RegisterNUICallback(name, function(data, cb)
+        local result = AwaitServer(name, payloadOf(data))
+        cb(result)
+    end)
+end
+
+RegisterNUICallback("toggleCamera", function(data, cb)
+    local payload = payloadOf(data)
+    local enabled = false
+
+    if type(payload) == "table" then
+        enabled = payload.enabled == true
+    elseif type(payload) == "boolean" then
+        enabled = payload
+    end
+
+    if enabled then
         exports["lb-phone"]:EnableWalkableCam()
     else
         exports["lb-phone"]:DisableWalkableCam()
     end
 
-else if(toggle) then
-    exports["lb-phone"]:EnableWalkableCam()
-    cb("ok")
+    cb({ ok = true })
 end)
 
 RegisterNUICallback("drawNotification", function(data, cb)
+    local payload = payloadOf(data)
+
     BeginTextCommandThefeedPost("STRING")
-    AddTextComponentSubstringPlayerName(data.message)
+    AddTextComponentSubstringPlayerName(payload.message or "SnipChat")
     EndTextCommandThefeedPostTicker(false, false)
 
-    cb("ok")
+    cb({ ok = true })
 end)
 
-while true do
-    Wait(25)
-
-    local yaw = math.floor(360.0 - ((GetFinalRenderedCamRot(0).z + 360.0) % 360.0) + 0.5)
-
-    if yaw == 360 then
-        yaw = 0
-    end
-
-    if oldYaw ~= yaw then
-        oldYaw = yaw
-        currentDirection = yaw .. "° " .. directions[math.floor((yaw + 22.5) / 45.0) % 8 + 1]
-
-        SendAppMessage("updateDirection", currentDirection)
-    end
-end
+RegisterServerAction("bootstrap")
+RegisterServerAction("registerAccount")
+RegisterServerAction("updateProfile")
+RegisterServerAction("addFriend")
+RegisterServerAction("listFriends")
+RegisterServerAction("captureStory")
+RegisterServerAction("sendMessage")
+RegisterServerAction("sendSnap")
+RegisterServerAction("openChat")
+RegisterServerAction("navigate")
