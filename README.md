@@ -1,21 +1,47 @@
-# LB Phone - TypeScript React Template
+# SnipChat - Installation rapide (FiveM)
 
-If you don't know how react.js works, you should use the [vanilla js](https://github.com/lbphone/lb-phone-app-template/tree/main/vanilla-js) template instead.
+Guide court pour lancer la ressource sur un serveur FiveM avec lb-phone.
 
-## Installing modules
+## 1) Prerequis
 
-1. Install [node.js](https://nodejs.org/en/download)
-2. CD to the `ui` folder and run `npm i`, wait for it to complete.
+- lb-phone installé
+- oxmysql recommander
+- Node.js installé (pour build l'UI)
 
-## Developing the app
+## 2) Build de l'UI
+cd ./ui/
+Depuis le dossier ui:
 
-1. Run `npm run dev`
-2. Go to `http://localhost:3000` in your browser to see the app in your browser.
-3. Comment out line 25 and uncomment line 24 in client.lua.
-4. Refresh and ensure the resource
+npm install
+npm run build
 
-## Building the app
+## 3) Base de donnees
 
-1. Run `npm run build` to build the app. The build will be in the `dist` folder.
-2. Comment out line 24 and uncomment line 25 in client.lua.
-3. Refresh and ensure the resource
+Importe le fichier server/schema.sql dans ta base SQL.
+
+## 4) Passer en mode production
+
+Dans fxmanifest.lua, utilise la ligne:
+
+ui_page "ui/dist/index.html"
+
+Et commente la ligne localhost si presente:
+
+-- ui_page "http://localhost:3000/"
+
+## 5) server.cfg
+
+Ordre conseille:
+
+ensure oxmysql
+ensure lb-phone
+ensure SnipChat
+
+## 6) Test rapide
+
+- Redemarre la ressource
+- Ouvre le telephone en jeu
+- Ouvre SnipChat
+- Cree un compte, puis verifie chats/amis
+
+Si tout est bon, build ui, importer le SQL et ensure la ressource.
