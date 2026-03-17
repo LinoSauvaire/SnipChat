@@ -1,4 +1,11 @@
 import type { AppPage } from "../types";
+import {
+  CameraIcon,
+  ChatBubbleLeftRightIcon,
+  UserGroupIcon,
+  UserCircleIcon,
+  SparklesIcon
+} from "@heroicons/react/24/outline";
 
 interface BottomNavProps {
   currentPage: AppPage;
@@ -6,11 +13,11 @@ interface BottomNavProps {
 }
 
 const nav = [
-  { page: "camera", label: "Camera", mark: "O" },
-  { page: "stories", label: "Stories", mark: "S" },
-  { page: "chats", label: "Messages", mark: "C" },
-  { page: "friends", label: "Amis", mark: "F" },
-  { page: "profile", label: "Profil", mark: "P" }
+  { page: "camera", label: "Camera", Icon: CameraIcon },
+  { page: "stories", label: "Stories", Icon: SparklesIcon },
+  { page: "chats", label: "Messages", Icon: ChatBubbleLeftRightIcon },
+  { page: "friends", label: "Amis", Icon: UserGroupIcon },
+  { page: "profile", label: "Profil", Icon: UserCircleIcon }
 ] as const;
 
 export function BottomNav({ currentPage, onNavigate }: BottomNavProps) {
@@ -18,6 +25,7 @@ export function BottomNav({ currentPage, onNavigate }: BottomNavProps) {
     <nav className="bottom-nav glass">
       {nav.map((item) => {
         const active = item.page === currentPage;
+        const Icon = item.Icon;
         return (
           <button
             key={item.page}
@@ -25,7 +33,9 @@ export function BottomNav({ currentPage, onNavigate }: BottomNavProps) {
             className={`nav-item ${active ? "active" : ""}`}
             onClick={() => onNavigate(item.page)}
           >
-            <span className="nav-mark">{item.mark}</span>
+            <span className="nav-mark" aria-hidden="true">
+              <Icon />
+            </span>
             <span>{item.label}</span>
           </button>
         );

@@ -12,7 +12,7 @@ export function ProfilePage({ friends, stories }: ProfilePageProps) {
       <section className="glass card profile-head">
         <div className="profile-avatar">SC</div>
         <div>
-          <h2>Snip Operator</h2>
+          <h2>Operateur Snip</h2>
           <p>@snipchat_me</p>
         </div>
       </section>
@@ -20,7 +20,7 @@ export function ProfilePage({ friends, stories }: ProfilePageProps) {
       <div className="stats-grid">
         <section className="glass card">
           <h3>{friends.length}</h3>
-          <p>Friends</p>
+          <p>Amis</p>
         </section>
         <section className="glass card">
           <h3>{stories.length}</h3>
@@ -29,8 +29,8 @@ export function ProfilePage({ friends, stories }: ProfilePageProps) {
       </div>
 
       <section className="glass card">
-        <h3>About</h3>
-        <p>SnipChat is a visual messenger for crews that move fast and communicate in moments.</p>
+        <h3>A propos</h3>
+        <p>SnipChat est une messagerie visuelle sobre, rapide et axee sur le partage instantane.</p>
       </section>
     </motion.section>
   );

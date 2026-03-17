@@ -9,7 +9,7 @@ export function ChatBubble({ message }: ChatBubbleProps) {
     <div className={`chat-bubble ${message.mine ? "mine" : "theirs"}`}>
       <p>{message.content}</p>
       <small>
-        {message.type.toUpperCase()} - {message.createdAt}
+        {message.type === "snap" ? "SNAP" : "TEXTE"} - {message.createdAt}
       </small>
     </div>
   );

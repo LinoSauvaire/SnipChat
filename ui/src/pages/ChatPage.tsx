@@ -27,7 +27,7 @@ export function ChatPage({
 
   return (
     <motion.section key="chats" initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} className="page">
-      <h2 className="section-title">Pulse Chats</h2>
+      <h2 className="section-title">Discussions</h2>
 
       <div className="chat-list">
         {conversations.map((conversation) => {
@@ -66,10 +66,10 @@ export function ChatPage({
           <input
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
-            placeholder="Type a message"
+            placeholder="Ecrire un message"
             maxLength={120}
           />
-          <button type="submit">Send</button>
+          <button type="submit">Envoyer</button>
         </form>
       </section>
     </motion.section>

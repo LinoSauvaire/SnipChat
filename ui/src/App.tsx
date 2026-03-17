@@ -53,7 +53,7 @@ function App() {
           {currentPage === "camera" && (
             <CameraPage
               onStoryCapture={() => {
-                captureStory("Captured from camera screen");
+                captureStory("Capture depuis l'ecran camera");
                 sendToLua("captureStory", { source: "camera" });
               }}
               onSendSnap={() => {

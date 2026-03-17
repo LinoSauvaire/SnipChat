@@ -9,7 +9,7 @@ interface StoriesPageProps {
 export function StoriesPage({ stories }: StoriesPageProps) {
   return (
     <motion.section key="stories" initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} className="page">
-      <h2 className="section-title">Story Circle</h2>
+      <h2 className="section-title">Stories recentes</h2>
       <div className="stories-grid">
         {stories.map((story) => (
           <StoryBubble key={story.id} story={story} />

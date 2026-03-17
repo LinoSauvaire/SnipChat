@@ -14,7 +14,7 @@ export function FriendsPage({ friends, onAddFriend }: FriendsPageProps) {
 
   return (
     <motion.section key="friends" initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} className="page">
-      <h2 className="section-title">Friends Hub</h2>
+      <h2 className="section-title">Amis</h2>
 
       <form
         className="glass add-friend"
@@ -26,9 +26,9 @@ export function FriendsPage({ friends, onAddFriend }: FriendsPageProps) {
           setUsername("");
         }}
       >
-        <input value={name} onChange={(event) => setName(event.target.value)} placeholder="Friend name" />
-        <input value={username} onChange={(event) => setUsername(event.target.value)} placeholder="@username" />
-        <button type="submit">Add friend</button>
+        <input value={name} onChange={(event) => setName(event.target.value)} placeholder="Nom de l'ami" />
+        <input value={username} onChange={(event) => setUsername(event.target.value)} placeholder="@pseudo" />
+        <button type="submit">Ajouter</button>
       </form>
 
       <div className="friends-list">

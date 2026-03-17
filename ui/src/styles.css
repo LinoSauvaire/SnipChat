@@ -1,13 +1,13 @@
 :root {
-  --bg-a: #090f1f;
-  --bg-b: #132241;
-  --bg-c: #103a4d;
-  --glass: rgba(255, 255, 255, 0.14);
-  --glass-border: rgba(255, 255, 255, 0.24);
-  --text-main: #eaf2ff;
-  --text-soft: #aebce3;
-  --mint: #36d6bf;
-  --cyan: #52a8ff;
+  --bg-a: #eef3fb;
+  --bg-b: #e6edf8;
+  --bg-c: #d8e4f5;
+  --glass: rgba(255, 255, 255, 0.74);
+  --glass-border: rgba(162, 180, 209, 0.6);
+  --text-main: #1f2a3f;
+  --text-soft: #6e82a6;
+  --mint: #3dc5a4;
+  --cyan: #4f84ef;
 }
 
 * {
@@ -20,10 +20,10 @@ body,
   margin: 0;
   width: 100%;
   height: 100%;
-  font-family: "Manrope", "Segoe UI", sans-serif;
+  font-family: "Sora", "Manrope", "Segoe UI", sans-serif;
   color: var(--text-main);
-  background: radial-gradient(circle at 10% 12%, #2f4e8a, transparent 30%),
-    radial-gradient(circle at 85% 85%, #1d6b85, transparent 32%),
+  background: radial-gradient(circle at 10% 12%, rgba(156, 186, 236, 0.5), transparent 38%),
+    radial-gradient(circle at 85% 85%, rgba(170, 214, 236, 0.45), transparent 38%),
     linear-gradient(160deg, var(--bg-a), var(--bg-b) 48%, var(--bg-c));
 }
 
@@ -43,10 +43,10 @@ input {
   width: min(390px, 100%);
   aspect-ratio: 9 / 19.5;
   border-radius: 34px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
-  backdrop-filter: blur(18px);
-  box-shadow: 0 24px 44px rgba(3, 8, 25, 0.56), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(166, 183, 209, 0.68);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(242, 247, 255, 0.6));
+  backdrop-filter: blur(14px);
+  box-shadow: 0 22px 40px rgba(59, 84, 124, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.82);
   padding: 12px;
   display: flex;
   flex-direction: column;
@@ -56,8 +56,8 @@ input {
 .glass {
   background: var(--glass);
   border: 1px solid var(--glass-border);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 8px 24px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(14px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.86), 0 8px 20px rgba(103, 126, 162, 0.18);
+  backdrop-filter: blur(10px);
 }
 
 .top-bar {
@@ -84,8 +84,8 @@ input {
   padding: 4px 10px;
   font-size: 0.64rem;
   font-weight: 700;
-  color: #051623;
-  background: linear-gradient(90deg, var(--mint), #aaf4e7);
+  color: #f2fffc;
+  background: linear-gradient(90deg, #38a589, #44c8ab);
 }
 
 .screen-body {
@@ -97,6 +97,10 @@ input {
   height: 100%;
   overflow: auto;
   padding: 4px 2px;
+}
+
+.camera-page {
+  display: flex;
 }
 
 .section-title {
@@ -116,6 +120,13 @@ input {
   overflow: hidden;
 }
 
+.camera-main {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border-radius: 26px;
+}
+
 .camera-glow {
   position: absolute;
   inset: 0;
@@ -132,6 +143,13 @@ input {
   font-size: 0.73rem;
 }
 
+.camera-meta {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 12px;
+}
+
 .camera-actions {
   display: flex;
   align-items: center;
@@ -139,29 +157,70 @@ input {
   margin-top: 10px;
 }
 
+.camera-actions-overlay {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 18px;
+  margin-top: 0;
+  z-index: 2;
+}
+
 .soft-btn {
-  border: 1px solid rgba(255, 255, 255, 0.24);
+  border: 1px solid rgba(159, 177, 206, 0.74);
   border-radius: 14px;
   padding: 10px 12px;
-  color: var(--text-main);
-  background: rgba(255, 255, 255, 0.12);
+  color: #324767;
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.86), rgba(230, 238, 252, 0.72));
+}
+
+.soft-btn-icon {
+  width: 88px;
+  height: 60px;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 4px;
+  border-radius: 16px;
+}
+
+.soft-btn-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.soft-btn-icon span {
+  font-size: 0.7rem;
+  font-weight: 600;
 }
 
 .capture-button {
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.8);
-  background: transparent;
+  border: 2px solid rgba(135, 153, 186, 0.78);
+  background: rgba(255, 255, 255, 0.5);
   display: grid;
   place-items: center;
+}
+
+.capture-main {
+  width: 92px;
+  height: 92px;
+  border-width: 3px;
+  box-shadow: 0 10px 20px rgba(77, 100, 137, 0.3);
 }
 
 .capture-button span {
   width: 54px;
   height: 54px;
   border-radius: 50%;
-  background: linear-gradient(155deg, #f6fbff, #b6f6ea);
+  background: linear-gradient(155deg, #fdfefe, #d5ecf8);
+}
+
+.capture-main span {
+  width: 70px;
+  height: 70px;
 }
 
 .stories-grid {
@@ -172,13 +231,13 @@ input {
 
 .story {
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(166, 185, 213, 0.6);
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.9), rgba(236, 244, 255, 0.72));
   padding: 12px;
 }
 
 .story.fresh {
-  box-shadow: 0 0 0 1px rgba(54, 214, 191, 0.55), 0 8px 20px rgba(7, 34, 42, 0.34);
+  box-shadow: 0 0 0 1px rgba(88, 126, 218, 0.2), 0 8px 16px rgba(113, 136, 177, 0.22);
 }
 
 .story-avatar,
@@ -190,8 +249,8 @@ input {
   display: grid;
   place-items: center;
   font-weight: 700;
-  background: linear-gradient(160deg, var(--cyan), var(--mint));
-  color: #061426;
+  background: linear-gradient(160deg, #b8d3ff, #c8e6ff);
+  color: #23406f;
 }
 
 .story p {
@@ -283,12 +342,13 @@ input {
 
 .chat-bubble.mine {
   margin-left: auto;
-  background: linear-gradient(150deg, var(--cyan), #69cbff);
-  color: #061221;
+  background: linear-gradient(150deg, #bdd5ff, #bae8ff);
+  color: #1f3255;
 }
 
 .chat-bubble.theirs {
-  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(169, 185, 209, 0.56);
+  background: rgba(255, 255, 255, 0.76);
 }
 
 .chat-bubble p {
@@ -310,9 +370,9 @@ input {
 .add-friend input {
   flex: 1;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(9, 17, 32, 0.56);
-  color: var(--text-main);
+  border: 1px solid rgba(167, 183, 210, 0.76);
+  background: rgba(255, 255, 255, 0.9);
+  color: #233753;
   padding: 10px;
 }
 
@@ -322,8 +382,8 @@ input {
   border-radius: 12px;
   padding: 10px 12px;
   font-weight: 700;
-  color: #071426;
-  background: linear-gradient(130deg, var(--cyan), var(--mint));
+  color: #eff5ff;
+  background: linear-gradient(130deg, var(--cyan), #6a9cff);
 }
 
 .add-friend {
@@ -386,8 +446,8 @@ input {
 }
 
 .nav-item.active {
-  background: rgba(255, 255, 255, 0.14);
-  color: var(--text-main);
+  background: linear-gradient(155deg, rgba(192, 211, 243, 0.66), rgba(229, 237, 251, 0.78));
+  color: #28467b;
 }
 
 .nav-mark {
@@ -396,8 +456,13 @@ input {
   border-radius: 8px;
   display: grid;
   place-items: center;
-  background: rgba(255, 255, 255, 0.12);
-  font-size: 0.62rem;
+  background: rgba(210, 223, 243, 0.74);
+}
+
+.nav-mark svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2;
 }
 
 @media (max-width: 460px) {
@@ -413,5 +478,20 @@ input {
 
   .add-friend {
     grid-template-columns: 1fr;
+  }
+
+  .soft-btn-icon {
+    width: 78px;
+    height: 56px;
+  }
+
+  .capture-main {
+    width: 82px;
+    height: 82px;
+  }
+
+  .capture-main span {
+    width: 62px;
+    height: 62px;
   }
 }

@@ -13,8 +13,8 @@ export const storiesSeed: Story[] = [
     friendId: "u1",
     name: "Nova Reyes",
     avatar: "NR",
-    mediaLabel: "Night drift at Del Perro Pier",
-    postedAt: "2m ago",
+    mediaLabel: "Session drift a Del Perro",
+    postedAt: "il y a 2 min",
     viewed: false
   },
   {
@@ -22,8 +22,8 @@ export const storiesSeed: Story[] = [
     friendId: "u2",
     name: "Kai Monroe",
     avatar: "KM",
-    mediaLabel: "Street art run in Vespucci",
-    postedAt: "18m ago",
+    mediaLabel: "Street art a Vespucci",
+    postedAt: "il y a 18 min",
     viewed: false
   },
   {
@@ -31,21 +31,21 @@ export const storiesSeed: Story[] = [
     friendId: "u3",
     name: "Mila Chen",
     avatar: "MC",
-    mediaLabel: "Sunset over Rockford Hills",
-    postedAt: "1h ago",
+    mediaLabel: "Coucher de soleil a Rockford Hills",
+    postedAt: "il y a 1 h",
     viewed: true
   }
 ];
 
 export const conversationsSeed: Conversation[] = [
-  { id: "c1", friendId: "u1", lastMessage: "Meet at Legion in 5?", updatedAt: "09:21", unread: 2 },
-  { id: "c2", friendId: "u2", lastMessage: "Sent a snap", updatedAt: "08:57", unread: 0 },
-  { id: "c3", friendId: "u3", lastMessage: "That paint job is perfect", updatedAt: "Yesterday", unread: 1 }
+  { id: "c1", friendId: "u1", lastMessage: "Legion dans 5 minutes ?", updatedAt: "09:21", unread: 2 },
+  { id: "c2", friendId: "u2", lastMessage: "Snap envoye", updatedAt: "08:57", unread: 0 },
+  { id: "c3", friendId: "u3", lastMessage: "Ta peinture est parfaite", updatedAt: "Hier", unread: 1 }
 ];
 
 export const messagesSeed: Message[] = [
-  { id: "m1", chatId: "c1", authorId: "u1", content: "Meet at Legion in 5?", createdAt: "09:21", type: "text", mine: false },
-  { id: "m2", chatId: "c1", authorId: "me", content: "On my way", createdAt: "09:22", type: "text", mine: true },
-  { id: "m3", chatId: "c2", authorId: "u2", content: "Sent a snap", createdAt: "08:57", type: "snap", mine: false },
-  { id: "m4", chatId: "c3", authorId: "me", content: "That skyline shot was clean", createdAt: "Yesterday", type: "text", mine: true }
+  { id: "m1", chatId: "c1", authorId: "u1", content: "Legion dans 5 minutes ?", createdAt: "09:21", type: "text", mine: false },
+  { id: "m2", chatId: "c1", authorId: "me", content: "J'arrive.", createdAt: "09:22", type: "text", mine: true },
+  { id: "m3", chatId: "c2", authorId: "u2", content: "Snap envoye", createdAt: "08:57", type: "snap", mine: false },
+  { id: "m4", chatId: "c3", authorId: "me", content: "Le skyline est propre", createdAt: "Hier", type: "text", mine: true }
 ];
