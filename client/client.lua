@@ -60,6 +60,8 @@ RegisterNUICallback("toggleCamera", function(toggle, cb)
         exports["lb-phone"]:DisableWalkableCam()
     end
 
+else if(toggle) then
+    exports["lb-phone"]:EnableWalkableCam()
     cb("ok")
 end)
 
