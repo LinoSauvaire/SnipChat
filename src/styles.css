@@ -1,0 +1,456 @@
+:root {
+  --bg-1: #0b1020;
+  --bg-2: #111b34;
+  --bg-3: #162748;
+  --glass: rgba(255, 255, 255, 0.16);
+  --glass-stroke: rgba(255, 255, 255, 0.24);
+  --text-main: #eaf0ff;
+  --text-soft: #b8c7ef;
+  --accent: #37d7c3;
+  --accent-2: #4f8cff;
+  --danger: #ff6b86;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  font-family: "Manrope", "Segoe UI", sans-serif;
+  color: var(--text-main);
+  background: radial-gradient(circle at 15% 10%, #29467d, transparent 32%),
+    radial-gradient(circle at 90% 80%, #1e5f7e, transparent 30%),
+    linear-gradient(160deg, var(--bg-1), var(--bg-2) 45%, var(--bg-3));
+}
+
+button,
+input {
+  font-family: inherit;
+}
+
+.nui-root {
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.phone-frame {
+  width: min(390px, 100%);
+  aspect-ratio: 9 / 19.5;
+  border-radius: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+  backdrop-filter: blur(18px);
+  box-shadow: 0 22px 48px rgba(1, 6, 20, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.glass {
+  background: var(--glass);
+  border: 1px solid var(--glass-stroke);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 8px 28px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(16px);
+}
+
+.top-bar {
+  border-radius: 22px;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-bar h1 {
+  margin: 0;
+  font-size: 1.02rem;
+}
+
+.top-bar p {
+  margin: 3px 0 0;
+  color: var(--text-soft);
+  font-size: 0.78rem;
+}
+
+.status-pill {
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  border-radius: 999px;
+  padding: 4px 9px;
+  color: #061524;
+  background: linear-gradient(90deg, var(--accent), #9af5e8);
+  font-weight: 700;
+}
+
+.app-body {
+  flex: 1;
+  overflow: hidden;
+}
+
+.page {
+  height: 100%;
+  overflow: auto;
+  padding: 6px 2px 6px;
+  scrollbar-width: thin;
+}
+
+.card {
+  border-radius: 18px;
+  padding: 12px;
+}
+
+.section-title {
+  margin: 6px 8px 12px;
+  font-size: 0.98rem;
+  letter-spacing: 0.02em;
+}
+
+.camera-page {
+  display: grid;
+  gap: 12px;
+}
+
+.camera-viewport {
+  border-radius: 24px;
+  min-height: 235px;
+  position: relative;
+  overflow: hidden;
+}
+
+.camera-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 72% 22%, rgba(79, 140, 255, 0.5), transparent 36%),
+    linear-gradient(140deg, rgba(55, 215, 195, 0.25), rgba(14, 23, 44, 0.7));
+}
+
+.camera-viewport p {
+  position: absolute;
+  left: 12px;
+  bottom: 10px;
+  margin: 0;
+  font-size: 0.74rem;
+  color: var(--text-soft);
+}
+
+.camera-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.soft-btn {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: var(--text-main);
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+
+.capture-button {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  background: transparent;
+  display: grid;
+  place-items: center;
+  transition: transform 180ms ease;
+}
+
+.capture-button:hover {
+  transform: scale(1.06);
+}
+
+.capture-button span {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: linear-gradient(150deg, #f7fbff, #b9f7ed);
+}
+
+.stories-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.story-bubble {
+  border-radius: 16px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.story-bubble.new {
+  box-shadow: 0 0 0 1px rgba(55, 215, 195, 0.5), 0 9px 24px rgba(7, 42, 47, 0.35);
+}
+
+.story-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  margin-bottom: 6px;
+  background: linear-gradient(160deg, var(--accent-2), var(--accent));
+  color: #021224;
+}
+
+.story-bubble p {
+  margin: 0;
+  font-size: 0.86rem;
+}
+
+.story-bubble small {
+  color: var(--text-soft);
+}
+
+.chat-layout {
+  display: grid;
+  gap: 10px;
+}
+
+.chat-list {
+  display: grid;
+  gap: 8px;
+}
+
+.conversation {
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.conversation.active .friend-row {
+  border-color: rgba(55, 215, 195, 0.7);
+}
+
+.friend-row {
+  border-radius: 16px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.friend-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  background: linear-gradient(160deg, #6aa0ff, #56e7cf);
+  color: #091021;
+}
+
+.friend-row h3 {
+  margin: 0;
+  font-size: 0.86rem;
+}
+
+.friend-row p {
+  margin: 2px 0 0;
+  color: var(--text-soft);
+  font-size: 0.75rem;
+}
+
+.friend-meta {
+  text-align: right;
+}
+
+.presence {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+.presence.online {
+  background: #47f3ab;
+}
+
+.presence.offline {
+  background: #6d7289;
+}
+
+.chat-thread {
+  border-radius: 18px;
+  min-height: 240px;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  overflow: hidden;
+}
+
+.messages {
+  padding: 10px;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  overflow: auto;
+}
+
+.chat-bubble {
+  max-width: 80%;
+  border-radius: 14px;
+  padding: 8px 10px;
+}
+
+.chat-bubble.mine {
+  margin-left: auto;
+  background: linear-gradient(140deg, var(--accent-2), #63c6ff);
+  color: #061126;
+}
+
+.chat-bubble.their {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.chat-bubble p {
+  margin: 0 0 3px;
+}
+
+.chat-bubble small {
+  font-size: 0.66rem;
+}
+
+.composer {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.composer input,
+.add-friend input {
+  flex: 1;
+  background: rgba(10, 18, 34, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--text-main);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.composer button,
+.add-friend button {
+  border-radius: 12px;
+  border: none;
+  padding: 10px 12px;
+  background: linear-gradient(130deg, var(--accent-2), var(--accent));
+  color: #071327;
+  font-weight: 700;
+}
+
+.add-friend {
+  border-radius: 18px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.friends-list {
+  display: grid;
+  gap: 8px;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.profile-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  background: linear-gradient(155deg, #5f8dff, #3bf0ca);
+  color: #071226;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.stats-grid h3 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.stats-grid p {
+  margin: 4px 0 0;
+  color: var(--text-soft);
+}
+
+.bottom-nav {
+  border-radius: 18px;
+  padding: 7px;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.nav-item {
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--text-soft);
+  display: grid;
+  place-items: center;
+  gap: 2px;
+  padding: 6px 3px;
+  font-size: 0.66rem;
+}
+
+.nav-item.active {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.12);
+  font-size: 0.62rem;
+}
+
+@media (max-width: 460px) {
+  .nui-root {
+    padding: 8px;
+  }
+
+  .phone-frame {
+    width: 100%;
+    min-height: 100%;
+    border-radius: 26px;
+  }
+
+  .add-friend {
+    grid-template-columns: 1fr;
+  }
+}
